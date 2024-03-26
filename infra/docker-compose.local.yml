@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ../src
+    restart: always
+    volumes:
+      - ../src:/app/
+    ports:
+      - "8000:8000"
+    command: >
+      sh -c "python manage.py runserver 0.0.0.0:8000"
+    container_name: chat_backend
