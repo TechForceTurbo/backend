@@ -1,4 +1,6 @@
+import asyncio
 import json
+
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 
@@ -10,10 +12,9 @@ class ChatConsumer(AsyncWebsocketConsumer):
         pass
 
     async def receive(self, text_data):
-        print(self.scope['cookies'])
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
-
+        await asyncio.sleep(2)
         await self.send(text_data=json.dumps({
             'message': message
         }))
