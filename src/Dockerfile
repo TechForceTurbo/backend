@@ -7,5 +7,4 @@ WORKDIR /app
 COPY . .
 
 RUN poetry config virtualenvs.create false && \
-    poetry install --no-interaction --no-ansi && \
-    poetry add gunicorn
+    poetry install --no-interaction --no-ansi

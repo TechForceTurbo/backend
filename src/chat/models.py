@@ -8,7 +8,6 @@ class ChatSession(models.Model):
     """
     SOURCE_CHOICES = [
         ('TG', 'Telegram'),
-        ('WA', 'WhatsApp'),
         ('WEB', 'Web'),
     ]
     session_id = models.CharField(max_length=100, verbose_name='идентификатор')
@@ -19,8 +18,6 @@ class ChatSession(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='дата создания')
-    updated_at = models.DateTimeField(auto_now=True,
-                                      verbose_name='дата последнего изменения')
 
 
 class ChatMessage(models.Model):
@@ -38,5 +35,7 @@ class ChatMessage(models.Model):
     message = models.TextField(verbose_name='текст сообщения')
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='дата отправки')
-    is_user_message = models.BooleanField(default=True,
-                                          verbose_name='отправлено пользователем')
+    is_user_message = models.BooleanField(
+        default=True,
+        verbose_name='отправлено пользователем'
+    )
