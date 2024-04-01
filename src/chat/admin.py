@@ -1,3 +1,11 @@
 from django.contrib import admin
+from chat.models import ChatMessage, ChatSession
 
-# Register your models here.
+@admin.register(ChatSession)
+class ChatSessionAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(ChatMessage)
+class ChatMessageAdmin(admin.ModelAdmin):
+    pass
