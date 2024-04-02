@@ -11,6 +11,8 @@ django = "4.2.11"
 channels = {extras = ["daphne"], version = "^4.0.0"}
 django-cors-headers = "^4.3.1"
 djangorestframework = "^3.15.1"
+flake8 = "^7.0.0"
+isort = "^5.13.2"
 
 
 [build-system]
