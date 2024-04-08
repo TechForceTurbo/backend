@@ -6,8 +6,10 @@ from urllib.parse import parse_qs
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from chat.models import ChatSession, ChatMessage
+from chat.models import ChatMessage, ChatSession
+from yandexgpt.views import YandexGPTClient
 
+gpt_client = YandexGPTClient()
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -25,10 +27,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+
+        # Сохраняем сообщение пользователя в базу данных
         await self.save_message(message)
-        await asyncio.sleep(2)
-        bot_response = message[::-1]
+
+        # Отправляем сообщение в YandexGPT и ждем ответа
+        bot_response = await gpt_client.generate_text(message)
+
+        # Сохраняем ответ от GPT в базу данных как сообщение от системы
         await self.save_message(bot_response, is_user_message=False)
+
+        # Отправляем ответ обратно клиенту через WebSocket
         await self.send(text_data=json.dumps({'message': bot_response}))
 
     @database_sync_to_async

@@ -138,3 +138,9 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 50,
 }
+
+YANDEX_GPT_API_KEY = os.getenv('YANDEX_GPT_API_KEY')
+YANDEX_FOLDER_ID = os.getenv('YANDEX_FOLDER_ID')
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
