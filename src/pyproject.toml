@@ -13,8 +13,18 @@ django-cors-headers = "^4.3.1"
 djangorestframework = "^3.15.1"
 flake8 = "^7.0.0"
 isort = "^5.13.2"
+requests = "^2.31.0"
+aiogram = "^3.4.1"
+python-dotenv = "^1.0.1"
+thefuzz = "^0.22.1"
+pytest = "^8.1.1"
+pytest-asyncio = "^0.23.6"
+pytest-django = "^4.8.0"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"

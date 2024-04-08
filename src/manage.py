@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+import asyncio
+import logging
 import os
 import sys
 
@@ -20,3 +22,10 @@ def main():
 
 if __name__ == '__main__':
     main()
+    from telegram_main import main_2
+
+    logging.basicConfig(level=logging.INFO)
+    try:
+        asyncio.run(main_2())
+    except KeyboardInterrupt:
+        print('Error')

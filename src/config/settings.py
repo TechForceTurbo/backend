@@ -27,7 +27,7 @@ DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(', ')
 
-
+os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 # Application definition
 
 INSTALLED_APPS = [
@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'chat.apps.ChatConfig',
+    'telegarm_bot.apps.TelegarmBotConfig'
 ]
 
 MIDDLEWARE = [
