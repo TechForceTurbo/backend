@@ -1,9 +1,16 @@
 import asyncio
+from http import HTTPStatus
 
 import httpx
 from django.conf import settings
+from httpx import AsyncClient
 
-from yandexgpt.constants import ERROR_MESSAGE, GPT_SYSTEM_ROLE, GPT_URL
+from yandexgpt.constants import (
+    ERROR_MESSAGE,
+    GPT_SYSTEM_ROLE,
+    GPT_URL,
+    ROLE_SYSTEM,
+)
 
 
 class YandexGPTClient:
@@ -22,8 +29,12 @@ class YandexGPTClient:
             "Content-Type": "application/json",
         }
 
-    async def generate_text(self, prompt):
+    async def generate_text(self, context: list) -> str:
         """Отправляет асинхронный запрос к YandexGPT."""
+        messages = [
+            {"role": ROLE_SYSTEM, "text": GPT_SYSTEM_ROLE}
+        ]
+        messages.extend(context)
         async with httpx.AsyncClient() as client:
             payload = {
                 "modelUri": f"gpt://{self.folder_id}/yandexgpt-pro",
@@ -32,30 +43,28 @@ class YandexGPTClient:
                     "temperature": 0.6,
                     "maxTokens": 2000,
                 },
-                "messages": [
-                    {"role": "system", "text": GPT_SYSTEM_ROLE},
-                    {"role": "user", "text": prompt},
-                ],
+                "messages": messages,
             }
             response = await client.post(
                 self.base_url,
                 headers=self.headers,
                 json=payload,
             )
-            if response.status_code == 200:
+            if response.status_code == HTTPStatus.OK:
                 operation_id = response.json()['id']
-                return await self.wait_for_completion(client, operation_id)
+                return await self._wait_for_completion(client, operation_id)
             else:
                 return ERROR_MESSAGE
 
-    async def wait_for_completion(self, client, operation_id):
+    async def _wait_for_completion(self, client: AsyncClient,
+                                   operation_id: str) -> str:
         """Ожидает завершения операции и возвращает результат."""
         while True:
             response = await client.get(
                 f'https://llm.api.cloud.yandex.net/operations/{operation_id}',
                 headers=self.headers,
             )
-            if response.status_code == 200:
+            if response.status_code == HTTPStatus.OK:
                 operation_response = response.json()
                 if operation_response.get('done', False):
                     return operation_response['response']['alternatives'][0][

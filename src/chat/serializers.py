@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from rest_framework.generics import get_object_or_404
 
-from chat.models import ChatMessage, ContactInfo, ChatSession
+from chat.models import ChatMessage, ChatSession, ContactInfo
 
 
 class ChatMessageSerializer(serializers.ModelSerializer):
