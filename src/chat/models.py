@@ -39,3 +39,21 @@ class ChatMessage(models.Model):
         default=True,
         verbose_name='отправлено пользователем'
     )
+
+
+class ContactInfo(models.Model):
+    """
+    Модель для хранения контактной информации пользователя в чате.
+    Содержит имя пользователя, его номер телефона и связь с сессией чата.
+    """
+    name = models.CharField(max_length=100, verbose_name='Имя')
+    phone = models.CharField(max_length=20, verbose_name='Номер телефона')
+    session = models.ForeignKey(
+        ChatSession,
+        on_delete=models.CASCADE,
+        related_name='contact_info',
+        verbose_name='Сессия'
+    )
+
+    def __str__(self):
+        return f'{self.name} ({self.phone})'

@@ -1,6 +1,11 @@
 from django.contrib import admin
 
-from chat.models import ChatMessage, ChatSession
+from chat.models import ChatMessage, ChatSession, ContactInfo
+
+
+class ContactInfoInline(admin.TabularInline):
+    model = ContactInfo
+    extra = 0
 
 
 class ChatMessageInline(admin.StackedInline):
@@ -14,7 +19,7 @@ class ChatMessageInline(admin.StackedInline):
 @admin.register(ChatSession)
 class ChatSessionAdmin(admin.ModelAdmin):
     list_display = ('session_id', 'source', 'created_at')
-    inlines = [ChatMessageInline]
+    inlines = (ContactInfoInline, ChatMessageInline)
 
 
 @admin.register(ChatMessage)
