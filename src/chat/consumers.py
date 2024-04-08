@@ -11,7 +11,10 @@ from yandexgpt.views import YandexGPTClient
 
 gpt_client = YandexGPTClient()
 
+
 class ChatConsumer(AsyncWebsocketConsumer):
+    last_message = None
+
     async def connect(self):
         query_string = self.scope['query_string'].decode()
         params = parse_qs(query_string)
@@ -27,6 +30,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+
+        if message == self.last_message:
+            return
+        self.last_message = message
 
         # Сохраняем сообщение пользователя в базу данных
         await self.save_message(message)
