@@ -54,6 +54,7 @@ class YandexGPTClient:
                 operation_id = response.json()['id']
                 return await self._wait_for_completion(client, operation_id)
             else:
+                print(response.json())
                 return ERROR_MESSAGE
 
     async def _wait_for_completion(self, client: AsyncClient,
