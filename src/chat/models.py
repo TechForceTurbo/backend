@@ -8,7 +8,6 @@ class ChatSession(models.Model):
     """
     SOURCE_CHOICES = [
         ('TG', 'Telegram'),
-        ('WA', 'WhatsApp'),
         ('WEB', 'Web'),
     ]
     session_id = models.CharField(max_length=100, verbose_name='идентификатор')
@@ -19,8 +18,6 @@ class ChatSession(models.Model):
     )
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='дата создания')
-    updated_at = models.DateTimeField(auto_now=True,
-                                      verbose_name='дата последнего изменения')
 
 
 class ChatMessage(models.Model):
@@ -38,5 +35,25 @@ class ChatMessage(models.Model):
     message = models.TextField(verbose_name='текст сообщения')
     created_at = models.DateTimeField(auto_now_add=True,
                                       verbose_name='дата отправки')
-    is_user_message = models.BooleanField(default=True,
-                                          verbose_name='отправлено пользователем')
+    is_user_message = models.BooleanField(
+        default=True,
+        verbose_name='отправлено пользователем'
+    )
+
+
+class ContactInfo(models.Model):
+    """
+    Модель для хранения контактной информации пользователя в чате.
+    Содержит имя пользователя, его номер телефона и связь с сессией чата.
+    """
+    name = models.CharField(max_length=100, verbose_name='Имя')
+    phone = models.CharField(max_length=20, verbose_name='Номер телефона')
+    session = models.ForeignKey(
+        ChatSession,
+        on_delete=models.CASCADE,
+        related_name='contact_info',
+        verbose_name='Сессия'
+    )
+
+    def __str__(self):
+        return f'{self.name} ({self.phone})'
