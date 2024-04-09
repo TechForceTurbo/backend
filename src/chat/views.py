@@ -1,9 +1,12 @@
 from django.shortcuts import get_object_or_404
+from rest_framework import status
 from rest_framework.generics import GenericAPIView
 from rest_framework.mixins import ListModelMixin
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from chat.models import ChatSession
-from chat.serializers import ChatMessageSerializer
+from chat.serializers import ChatMessageSerializer, ContactInfoSerializer
 
 
 class ChatHistory(GenericAPIView, ListModelMixin):
@@ -16,3 +19,12 @@ class ChatHistory(GenericAPIView, ListModelMixin):
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
+
+
+class ContactInfoView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = ContactInfoSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
