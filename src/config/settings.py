@@ -26,10 +26,8 @@ SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-key')
 DEBUG = os.getenv('DEBUG', 'True').lower() == 'true'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(', ')
-
-
+CSRF_TRUSTED_ORIGINS = ['https://vink.ragimov700.ru']
 # Application definition
-
 INSTALLED_APPS = [
     'daphne',
     'django.contrib.admin',
@@ -84,8 +82,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'postgres'),
+        'USER': os.getenv('POSTGRES_USER', 'admin'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
 }
 

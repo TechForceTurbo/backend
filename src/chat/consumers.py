@@ -17,6 +17,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     """
     Асинхронный WebSocket потребитель для обработки чат-сессий.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.context = []
@@ -88,3 +89,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message=message,
             is_user_message=is_user_message
         )
+
+
+@database_sync_to_async
+def get_or_create_session2(self, source='WEB'):
+    """
+    Получает или создает сессию чата в базе данных.
+    """
+    session, _ = ChatSession.objects.get_or_create(
+        session_id=self.session_id, source=source
+    )
+    return session
